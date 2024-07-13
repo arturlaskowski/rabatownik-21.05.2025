@@ -14,6 +14,9 @@ class ValueDiscountStrategy implements DiscountStrategy {
     private final Money discountValue;
 
     public ValueDiscountStrategy(@Value("${discount.value}") BigDecimal discountValue) {
+        if (discountValue.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Discount value cannot be negative");
+        }
         this.discountValue = new Money(discountValue);
     }
 

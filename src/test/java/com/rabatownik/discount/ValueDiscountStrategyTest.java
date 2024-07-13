@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ValueDiscountStrategyTest {
 
@@ -36,5 +37,14 @@ class ValueDiscountStrategyTest {
         var result = valueDiscountStrategy.calculateDiscount(price);
 
         assertThat(result).isEqualTo(Money.ZERO);
+    }
+
+    @Test
+    void cannotSetNegativeDiscountValue() {
+        var negativeDiscountValue = new BigDecimal("-5.00");
+
+        assertThatThrownBy(() -> new ValueDiscountStrategy(negativeDiscountValue))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Discount value cannot be negative");
     }
 }
